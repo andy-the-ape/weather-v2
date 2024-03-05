@@ -2,6 +2,8 @@ package dev.honoreandreas.weatherv2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class WeatherV2Application {
@@ -10,4 +12,8 @@ public class WeatherV2Application {
 		SpringApplication.run(WeatherV2Application.class, args);
 	}
 
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 }
