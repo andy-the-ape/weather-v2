@@ -8,14 +8,16 @@ CREATE TABLE location (
 CREATE TABLE type (
                       id SERIAL PRIMARY KEY,
                       name TEXT NOT NULL,
-                      icon TEXT NOT NULL
+                      api_id INT NOT NULL,
+                      icon_code TEXT NOT NULL
 );
 
 CREATE TABLE weather (
                          id SERIAL PRIMARY KEY,
                          location_id INT NOT NULL REFERENCES location(id),
                          type_id INT NOT NULL REFERENCES type(id),
-                         timestamp TEXT NOT NULL,
+                         date DATE NOT NULL,
+                         time TIME NOT NULL,
                          temperature NUMERIC NOT NULL,
                          humidity SMALLINT NOT NULL,
                          wind_speed NUMERIC NOT NULL,

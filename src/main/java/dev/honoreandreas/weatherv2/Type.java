@@ -1,10 +1,7 @@
 package dev.honoreandreas.weatherv2;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,5 +21,16 @@ public class Type {
     private Set<Weather> weathers = new HashSet<>();
 
     private String name;
-    private String icon;
+
+    @Column(name = "api_id")
+    private int apiId;
+
+    @Column(name = "icon_code")
+    private String iconCode;
+
+    public Type(int apiId, String name, String iconCode) {
+        this.apiId = apiId;
+        this.name = name;
+        this.iconCode = iconCode;
+    }
 }

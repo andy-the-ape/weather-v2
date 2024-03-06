@@ -35,7 +35,27 @@ public class Weather {
     @Column(name = "wind_direction")
     private int windDirection;
 
-    private String title;
-
     private String description;
+
+    public Weather(
+                   Location locationId,
+                   Type typeId,
+                   String date,
+                   String time,
+                   double temperature,
+                   int humidity,
+                   double windSpeed,
+                   int windDirection,
+                   String description
+    ) {
+        this.locationId = locationId;
+        this.typeId = typeId;
+        this.date = date;
+        this.time = time;
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.windSpeed = windSpeed;
+        this.windDirection = windDirection;
+        this.description = description;
+    }
 }
