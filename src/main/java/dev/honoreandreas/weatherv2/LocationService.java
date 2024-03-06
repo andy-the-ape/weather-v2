@@ -16,4 +16,11 @@ public class LocationService {
         return locationRepository.findById(id);
     }
 
+    public Optional<Location> firstLocation() {
+        return locationRepository.findFirstByOrderByIdAsc();
+    }
+
+    public Location newLocation(String location, double latitude, double longitude) {
+        return locationRepository.save(new Location(location, latitude, longitude));
+    }
 }

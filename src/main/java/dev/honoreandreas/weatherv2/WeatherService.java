@@ -57,29 +57,26 @@ public class WeatherService {
     //This method runs every 5 minutes to gather data from the external weather API
     @Scheduled(cron = "0 */5 * * * *")
     public void fetchWeatherFromExternalApi() {
-        //By default, it will get weather for this location
-        Long locationId = 1L;
-        double latitude = 55.39594;
-        double longitude = 10.38831;
-        Location locationObject;
+        /* Get the necessary Location Object (if it exists), otherwise create it. By default,
+        it will get weather for Odense. Currently only getting weather for one location, can be
+        changed to loop all locations in database (but be mindful of allowed API calls) */
 
-        //Currently only getting weather for one location, can be changed to loop all locations in database
-        //(but be mindful of allowed API calls)
-        if (locationService.locationById(locationId).isPresent()) {
-            locationObject = locationService.locationById(locationId).get();
-            latitude = locationObject.getLatitude();
-            longitude = locationObject.getLongitude();
+        Location locationObject;
+        if (locationService.firstLocation().isPresent()) {
+            locationObject = locationService.firstLocation().get();
+        } else {
+            locationObject = locationService.newLocation("Odense", 55.39594, 10.38831);
         }
 
         //Handling date and time format
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = LocalDate.now().format(dateFormatter);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedTime = LocalTime.now().format(timeFormatter);
 
         //Get JSON from external API and map the fields we want
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(
-                getApiUrl(latitude, longitude),
+                getApiUrl(locationObject.getLatitude(), locationObject.getLongitude()),
                 String.class);
         String weatherJson = responseEntity.getBody();
         try {
@@ -94,7 +91,7 @@ public class WeatherService {
             double windSpeed = weatherNode.get("wind").get("speed").doubleValue(); //comes out in km/t with 2 decimals
             int windDirection = weatherNode.get("wind").get("deg").intValue(); //comes out in degrees as int from 0-360
 
-            //Getting the necessary Type Object (if it exists), otherwise create it
+            //Get the necessary Type Object (if it exists), otherwise create it
             Type typeObject;
             if (typeService.typeByApiId(apiId).isPresent()) {
                 typeObject = typeService.typeByApiId(apiId).get();
