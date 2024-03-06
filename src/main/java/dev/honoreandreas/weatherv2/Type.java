@@ -7,7 +7,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity(name = "type")
 public class Type {
 
@@ -15,7 +14,7 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Weather> weathers;
 
     private String name;

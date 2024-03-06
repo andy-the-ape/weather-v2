@@ -9,7 +9,6 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity(name = "weather")
 public class Weather {
     @Id

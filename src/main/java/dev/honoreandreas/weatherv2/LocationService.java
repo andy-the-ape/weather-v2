@@ -1,7 +1,7 @@
 package dev.honoreandreas.weatherv2;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,8 +19,9 @@ public class LocationService {
     public Optional<Location> firstLocation() {
         return locationRepository.findFirstByOrderByIdAsc();
     }
-
+    
     public Location newLocation(String location, double latitude, double longitude) {
-        return locationRepository.save(new Location(location, latitude, longitude));
+        Location locationObject = new Location(location, latitude, longitude);
+        return locationRepository.save(locationObject);
     }
 }

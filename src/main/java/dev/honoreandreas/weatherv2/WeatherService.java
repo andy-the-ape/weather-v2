@@ -3,6 +3,7 @@ package dev.honoreandreas.weatherv2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Service
 @Getter
 @RequiredArgsConstructor
+@Transactional
 public class WeatherService {
 
     private final WeatherRepository weatherRepository;
@@ -55,8 +57,10 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-    @Scheduled(cron = "0 */5 * * * *")
+//    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(fixedDelay = 10000)
     public void fetchWeatherFromExternalApi() {
+        System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,
         it will get weather for Odense. Currently only getting weather for one location, can be
         changed to loop all locations in database (but be mindful of allowed API calls) */
@@ -111,6 +115,7 @@ public class WeatherService {
                     windDirection,
                     weatherDescription
             ));
+            System.out.println("Stored a new weather");
 
         } catch (JsonProcessingException e) {
             e.printStackTrace(System.out);
