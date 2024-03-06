@@ -20,6 +20,6 @@ CREATE TABLE weather (
                          humidity SMALLINT NOT NULL,
                          wind_speed NUMERIC NOT NULL,
                          wind_direction SMALLINT NOT NULL,
+                         title TEXT NOT NULL,
                          description TEXT NOT NULL
 );
-

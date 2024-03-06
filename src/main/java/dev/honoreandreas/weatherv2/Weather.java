@@ -24,7 +24,8 @@ public class Weather {
     @JoinColumn(name = "type_id")
     private Type typeId;
 
-    private String timestamp;
+    private String date;
+    private String time;
     private double temperature;
     private int humidity;
 
@@ -33,6 +34,8 @@ public class Weather {
 
     @Column(name = "wind_direction")
     private int windDirection;
+
+    private String title;
 
     private String description;
 }
