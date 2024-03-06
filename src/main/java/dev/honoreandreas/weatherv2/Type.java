@@ -2,9 +2,7 @@ package dev.honoreandreas.weatherv2;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +15,8 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "weather", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Weather> weathers = new HashSet<>();
+    @OneToMany(mappedBy = "typeId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Weather> weathers;
 
     private String name;
 

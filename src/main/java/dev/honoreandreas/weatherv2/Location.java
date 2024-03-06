@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +17,8 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "weather", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Weather> weathers = new HashSet<>();
+    @OneToMany(mappedBy = "locationId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Weather> weathers;
 
     private String name;
     private double latitude;
