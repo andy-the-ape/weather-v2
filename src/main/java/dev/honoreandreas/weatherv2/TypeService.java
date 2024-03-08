@@ -1,5 +1,6 @@
 package dev.honoreandreas.weatherv2;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class TypeService {
         return typeRepository.findByApiId(apiId);
     }
 
+    @Transactional
     public Type newType(int apiId, String name, String iconCode) {
         return typeRepository.save(new Type(apiId, name, iconCode));
     }

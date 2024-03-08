@@ -3,13 +3,14 @@ package dev.honoreandreas.weatherv2;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "weather")
+@Getter
 public class Weather {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +18,11 @@ public class Weather {
 
     @ManyToOne()
     @JoinColumn(name = "location_id")
-    private Location locationId;
+    private Location location;
 
     @ManyToOne()
     @JoinColumn(name = "type_id")
-    private Type typeId;
+    private Type type;
 
     private String date;
     private String time;
@@ -37,8 +38,8 @@ public class Weather {
     private String description;
 
     public Weather(
-                   Location locationId,
-                   Type typeId,
+                   Location location,
+                   Type type,
                    String date,
                    String time,
                    double temperature,
@@ -47,8 +48,8 @@ public class Weather {
                    int windDirection,
                    String description
     ) {
-        this.locationId = locationId;
-        this.typeId = typeId;
+        this.location = location;
+        this.type = type;
         this.date = date;
         this.time = time;
         this.temperature = temperature;

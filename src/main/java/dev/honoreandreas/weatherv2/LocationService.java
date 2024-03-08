@@ -19,9 +19,10 @@ public class LocationService {
     public Optional<Location> firstLocation() {
         return locationRepository.findFirstByOrderByIdAsc();
     }
-    
-    public Location newLocation(String location, double latitude, double longitude) {
-        Location locationObject = new Location(location, latitude, longitude);
+
+    @Transactional
+    public Location newLocation(String name, double latitude, double longitude) {
+        Location locationObject = new Location(name, latitude, longitude);
         return locationRepository.save(locationObject);
     }
 }

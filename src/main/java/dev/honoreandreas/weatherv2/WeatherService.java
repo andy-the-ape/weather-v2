@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,13 +33,16 @@ public class WeatherService {
 
     private Weather currentWeather;
 
-    public Optional<List<Weather>> allWeatherRecords() {
+    public Optional<Weather> singleWeather(Long id) {
+        return weatherRepository.findById(id);
+    }
+    public Optional<List<Weather>> allWeathers() {
         return Optional.of(weatherRepository.findAll());
     }
-    public Optional<Weather> singleWeatherRecord(String date) {
+    public Optional<List<Weather>> allWeathersOnDate(String date) {
         return weatherRepository.findByDate(date);
     }
-    public Optional<List<Weather>> allWeatherRecordsBetweenDates(String startDate, String endDate) {
+    public Optional<List<Weather>> allWeathersBetweenDates(String startDate, String endDate) {
         return weatherRepository.findWeatherByDateGreaterThanEqualAndDateLessThanEqual(
                 startDate,
                 endDate,
@@ -58,7 +60,7 @@ public class WeatherService {
 
     //This method runs every 5 minutes to gather data from the external weather API
 //    @Scheduled(cron = "0 */5 * * * *")
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,
@@ -67,8 +69,10 @@ public class WeatherService {
 
         Location locationObject;
         if (locationService.firstLocation().isPresent()) {
+            System.out.println("a first location was found");
             locationObject = locationService.firstLocation().get();
         } else {
+            System.out.println("no location was found - attempting to add standard location");
             locationObject = locationService.newLocation("Odense", 55.39594, 10.38831);
         }
 
@@ -98,13 +102,15 @@ public class WeatherService {
             //Get the necessary Type Object (if it exists), otherwise create it
             Type typeObject;
             if (typeService.typeByApiId(apiId).isPresent()) {
+                System.out.println("a type was found with that api_id");
                 typeObject = typeService.typeByApiId(apiId).get();
             } else {
+                System.out.println("no type was found with that api_id, adding it to the db.");
                 typeObject = typeService.newType(apiId, typeName, iconCode);
             }
 
-            //Now create and persist the Weather Object
-            weatherRepository.save(newWeather(
+            //Now create and persist the Weather Object, and also store it in the currentWeather variable
+            currentWeather = weatherRepository.save(newWeather(
                     locationObject,
                     typeObject,
                     formattedDate,
@@ -115,8 +121,7 @@ public class WeatherService {
                     windDirection,
                     weatherDescription
             ));
-            System.out.println("Stored a new weather");
-
+            System.out.println("current weather is = "+currentWeather);
         } catch (JsonProcessingException e) {
             e.printStackTrace(System.out);
         }

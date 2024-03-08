@@ -1,14 +1,45 @@
 package dev.honoreandreas.weatherv2;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/weather")
 @CrossOrigin(origins="*")
+@AllArgsConstructor
 public class WeatherController {
-    @Autowired
-    private WeatherService weatherService;
+
+    private final WeatherService weatherService;
+
+    @GetMapping
+    @ResponseBody
+    public Weather getCurrentWeather() {
+        return weatherService.getCurrentWeather();
+    }
+
+    @GetMapping("/{date}")
+    public ResponseEntity<Optional<List<Weather>>> getWeatherByDate(@PathVariable String date) {
+        return new ResponseEntity<>(weatherService.allWeathersOnDate(date), HttpStatus.OK);
+    }
+
+    @GetMapping("/{startDate}/{endDate}")
+    public ResponseEntity<Optional<List<Weather>>> getWeatherRecordsBetweenDates(
+            @PathVariable String startDate,
+            @PathVariable String endDate
+    ) {
+        return new ResponseEntity<>(weatherService.allWeathersBetweenDates(startDate, endDate), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Optional<List<Weather>>> getAllWeathers() {
+        return new ResponseEntity<>(weatherService.allWeathers(), HttpStatus.OK);
+    }
+
+
+
+
 }

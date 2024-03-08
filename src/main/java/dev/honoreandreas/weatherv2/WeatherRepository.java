@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface WeatherRepository extends JpaRepository<Weather, Long> {
-    Optional<Weather> findByDate(String date);
+    Optional<List<Weather>> findByDate(String date);
     Optional<List<Weather>> findWeatherByDateGreaterThanEqualAndDateLessThanEqual(String startDate, String endDate, Sort sort);
 }
