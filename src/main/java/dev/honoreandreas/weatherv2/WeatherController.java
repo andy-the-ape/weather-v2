@@ -33,7 +33,7 @@ public class WeatherController {
         return new ResponseEntity<>(weatherService.allWeathersBetweenDates(startDate, endDate), HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/historik")
     public ResponseEntity<Optional<List<Weather>>> getAllWeathers() {
         return new ResponseEntity<>(weatherService.allWeathers(), HttpStatus.OK);
     }

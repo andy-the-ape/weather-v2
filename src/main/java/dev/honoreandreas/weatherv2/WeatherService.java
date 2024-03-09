@@ -63,8 +63,8 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-    @Scheduled(cron = "0 */5 * * * *")
-//    @Scheduled(fixedDelay = 30000)
+//    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,
@@ -83,7 +83,7 @@ public class WeatherService {
         //Handling date and time format
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = LocalDate.now().format(dateFormatter);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         String formattedTime = LocalTime.now().format(timeFormatter);
 
         //Get JSON from external API and map the fields we want
