@@ -33,8 +33,12 @@ public class WeatherService {
 
     private Weather currentWeather;
 
-    public Optional<Weather> singleWeather(Long id) {
+    public Optional<Weather> singleWeatherById(Long id) {
         return weatherRepository.findById(id);
+    }
+
+    public Optional<Weather> latestWeather() {
+        return weatherRepository.findLatestWeather();
     }
     public Optional<List<Weather>> allWeathers() {
         return Optional.of(weatherRepository.findAll());
@@ -59,8 +63,8 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-//    @Scheduled(cron = "0 */5 * * * *")
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 */5 * * * *")
+//    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,
