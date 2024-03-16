@@ -15,7 +15,7 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Optional<Weather>> getLatestWeather() {
         return new ResponseEntity<>(weatherService.latestWeather(), HttpStatus.OK);
     }
@@ -38,6 +38,10 @@ public class WeatherController {
         return new ResponseEntity<>(weatherService.allWeathers(), HttpStatus.OK);
     }
 
+    @GetMapping("/historik/48")
+    public ResponseEntity<Optional<List<Weather>>> getLatest48HourlyWeathers() {
+        return new ResponseEntity<>(weatherService.latest48HourlyWeathers(), HttpStatus.OK);
+    }
 
 
 

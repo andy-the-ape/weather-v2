@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,8 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Getter
@@ -38,7 +38,7 @@ public class WeatherService {
     }
 
     public Optional<Weather> latestWeather() {
-        return weatherRepository.findLatestWeather();
+        return weatherRepository.findTopDistinctByOrderByDateDescTimeDesc();
     }
     public Optional<List<Weather>> allWeathers() {
         return Optional.of(weatherRepository.findAll());
@@ -50,8 +50,29 @@ public class WeatherService {
         return weatherRepository.findWeatherByDateGreaterThanEqualAndDateLessThanEqual(
                 startDate,
                 endDate,
-                Sort.by(Sort.Direction.ASC, "timestamp")
+                Sort.by(Sort.Direction.ASC, "date","time")
         );
+    }
+    public Optional<List<Weather>> latest48HourlyWeathers() {
+        LocalDate currentDate = LocalDate.now();
+        Optional<List<Weather>> allWeathersTheLast48Hours = allWeathersBetweenDates(currentDate.minusDays(2).toString(), currentDate.toString());
+        if (allWeathersTheLast48Hours.isPresent()) {
+            List<Weather> allWeathersUnwrappedList = allWeathersTheLast48Hours.get();
+            Map<String, Weather> hourlyWeatherMap = new HashMap<>();
+            for (Weather weather : allWeathersUnwrappedList) {
+                String day = weather.getDate().split("-",3)[2];
+                String hour = weather.getTime().split(":",3)[0];
+                String mapKey = day.concat(hour);
+                hourlyWeatherMap.putIfAbsent(mapKey, weather);
+            }
+            Collection<Weather> values = hourlyWeatherMap.values();
+            List<Weather> sortedValues = new ArrayList<>(values);
+            sortedValues.sort(Comparator.comparing(String::valueOf));
+            List<Weather> latest48HourlyWeathersList = new ArrayList<>(sortedValues);
+            return Optional.of(latest48HourlyWeathersList);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public String getApiUrl(double latitude, double longitude) {
