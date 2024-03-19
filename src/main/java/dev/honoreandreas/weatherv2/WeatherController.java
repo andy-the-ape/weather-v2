@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/weather")
 @CrossOrigin(origins="*")
+@RequestMapping("/api/v1/weather")
 @AllArgsConstructor
 public class WeatherController {
 

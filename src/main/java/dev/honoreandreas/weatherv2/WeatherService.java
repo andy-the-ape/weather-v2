@@ -98,7 +98,7 @@ public class WeatherService {
             locationObject = locationService.firstLocation().get();
         } else {
             System.out.println("no location was found - attempting to add standard location");
-            locationObject = locationService.newLocation("Odense", 55.39594, 10.38831);
+            locationObject = locationService.newLocation("Syddansk Universitet", 55.36821, 10.42395);
         }
 
         //Handling date and time format
