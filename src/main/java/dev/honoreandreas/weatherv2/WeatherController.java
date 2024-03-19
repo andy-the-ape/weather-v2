@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/v1/weather")
 @AllArgsConstructor
 public class WeatherController {
 
     private final WeatherService weatherService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Optional<Weather>> getLatestWeather() {
         return new ResponseEntity<>(weatherService.latestWeather(), HttpStatus.OK);
     }
