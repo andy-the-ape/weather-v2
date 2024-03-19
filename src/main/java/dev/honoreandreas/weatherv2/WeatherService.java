@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -53,27 +54,38 @@ public class WeatherService {
                 Sort.by(Sort.Direction.ASC, "date","time")
         );
     }
+
     public Optional<List<Weather>> latest48HourlyWeathers() {
         LocalDate currentDate = LocalDate.now();
-        Optional<List<Weather>> allWeathersTheLast48Hours = allWeathersBetweenDates(currentDate.minusDays(2).toString(), currentDate.toString());
+        Optional<List<Weather>> allWeathersTheLast48Hours = allWeathersBetweenDates(
+                currentDate.minusDays(2).toString(),
+                currentDate.toString()
+        );
+
         if (allWeathersTheLast48Hours.isPresent()) {
             List<Weather> allWeathersUnwrappedList = allWeathersTheLast48Hours.get();
-            Map<String, Weather> hourlyWeatherMap = new HashMap<>();
+            Map<LocalDateTime, Weather> hourlyWeatherMap = new TreeMap<>(); // TreeMap for automatic sorting
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
             for (Weather weather : allWeathersUnwrappedList) {
-                String day = weather.getDate().split("-",3)[2];
-                String hour = weather.getTime().split(":",3)[0];
-                String mapKey = day.concat(hour);
-                hourlyWeatherMap.putIfAbsent(mapKey, weather);
+                LocalDateTime dateTime = LocalDateTime.parse(weather.getDate() + " " + weather.getTime(), formatter);
+                int hour = dateTime.getHour();
+                LocalDateTime mapKey = LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(), hour, 0);
+
+                // Check if there's already a Weather object for this hour
+                Weather existingWeather = hourlyWeatherMap.get(mapKey);
+                if (existingWeather == null || existingWeather.getDate().compareTo(weather.getDate()) > 0) {
+                    hourlyWeatherMap.put(mapKey, weather);
+                }
             }
-            Collection<Weather> values = hourlyWeatherMap.values();
-            List<Weather> sortedValues = new ArrayList<>(values);
-            sortedValues.sort(Comparator.comparing(String::valueOf));
-            List<Weather> latest48HourlyWeathersList = new ArrayList<>(sortedValues);
+
+            List<Weather> latest48HourlyWeathersList = new ArrayList<>(hourlyWeatherMap.values());
             return Optional.of(latest48HourlyWeathersList);
         } else {
             return Optional.empty();
         }
     }
+
 
     public String getApiUrl(double latitude, double longitude) {
         return "https://api.openweathermap.org/data/2.5/weather?lat=" +
