@@ -17,6 +17,4 @@ public interface WeatherRepository extends JpaRepository<Weather, Long> {
 
     Optional<List<Weather>> findWeatherByDateGreaterThanEqualAndDateLessThanEqual(String startDate, String endDate, Sort sort);
 
-//    List<Weather> findTop50DistinctByOrderByDateDescTimeDesc();
-
 }

@@ -96,12 +96,12 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-//    @Scheduled(cron = "0 */5 * * * *")
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 */5 * * * *")
+//    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,
-        it will get weather for Odense. Currently only getting weather for one location, can be
+        it will get weather for Syddansk Universitet. Currently only getting weather for one location, can be
         changed to loop all locations in database (but be mindful of allowed API calls) */
 
         Location locationObject;
