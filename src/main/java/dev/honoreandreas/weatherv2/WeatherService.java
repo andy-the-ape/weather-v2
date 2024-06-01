@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,9 @@ public class WeatherService {
     private final TypeService typeService;
 
     private Weather currentWeather;
+
+    @Value("${apiKey}")
+    private String apiKey;
 
     public Optional<Weather> singleWeatherById(Long id) {
         return weatherRepository.findById(id);
@@ -92,7 +96,9 @@ public class WeatherService {
                 latitude +
                 "&lon=" +
                 longitude +
-                "&appid=2438ec868e96bc0d041dc6fde565f0b6&units=metric&lang=da";
+                "&appid=" +
+                apiKey +
+                "&units=metric&lang=da";
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
