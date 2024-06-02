@@ -30,17 +30,15 @@ public class WeatherService {
     private static final String API_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=metric&lang=da";
 
     private final WeatherRepository weatherRepository;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final LocationService locationService;
     private final TypeService typeService;
     private final ApiKeyConfig apiKeyConfig;
 
-    public Weather getCurrentWeather() {
-        return currentWeather;
-    }
-
-    public WeatherService(WeatherRepository weatherRepository, LocationService locationService, TypeService typeService, ApiKeyConfig apiKeyConfig) {
+    //Constructor
+    public WeatherService(WeatherRepository weatherRepository, RestTemplate restTemplate, LocationService locationService, TypeService typeService, ApiKeyConfig apiKeyConfig) {
         this.weatherRepository = weatherRepository;
+        this.restTemplate = restTemplate;
         this.locationService = locationService;
         this.typeService = typeService;
         this.apiKeyConfig = apiKeyConfig;
@@ -48,6 +46,9 @@ public class WeatherService {
 
     private Weather currentWeather;
 
+    public Weather getCurrentWeather() {
+        return currentWeather;
+    }
     public Optional<Weather> singleWeatherById(Long id) {
         return weatherRepository.findById(id);
     }
