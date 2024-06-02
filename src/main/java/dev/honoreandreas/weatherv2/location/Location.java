@@ -3,17 +3,9 @@ package dev.honoreandreas.weatherv2.location;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.honoreandreas.weatherv2.weather.Weather;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Entity(name = "location")
 public class Location {
     @Id
@@ -21,7 +13,6 @@ public class Location {
     private Long id;
 
     @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Weather> weathers;
 
@@ -33,5 +24,59 @@ public class Location {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Location() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Weather> getWeathers() {
+        return weathers;
+    }
+
+    public void setWeathers(List<Weather> weathers) {
+        this.weathers = weathers;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 }

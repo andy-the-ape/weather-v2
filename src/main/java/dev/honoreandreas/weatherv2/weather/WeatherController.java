@@ -1,6 +1,5 @@
 package dev.honoreandreas.weatherv2.weather;
 
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +9,13 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/v1/weather")
-@AllArgsConstructor
 public class WeatherController {
 
     private final WeatherService weatherService;
+
+    public WeatherController(WeatherService weatherService) {
+        this.weatherService = weatherService;
+    }
 
     @GetMapping
     public ResponseEntity<Optional<Weather>> getLatestWeather() {
@@ -42,7 +44,5 @@ public class WeatherController {
     public ResponseEntity<Optional<List<Weather>>> getLatest48HourlyWeathers() {
         return new ResponseEntity<>(weatherService.latest48HourlyWeathers(), HttpStatus.OK);
     }
-
-
 
 }

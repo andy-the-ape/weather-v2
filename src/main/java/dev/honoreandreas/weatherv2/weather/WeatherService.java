@@ -9,9 +9,6 @@ import dev.honoreandreas.weatherv2.location.LocationService;
 import dev.honoreandreas.weatherv2.weathertype.Type;
 import dev.honoreandreas.weatherv2.weathertype.TypeService;
 import jakarta.transaction.Transactional;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-@Getter
-@RequiredArgsConstructor
 @Transactional
 public class WeatherService {
 
@@ -39,6 +34,17 @@ public class WeatherService {
     private final LocationService locationService;
     private final TypeService typeService;
     private final ApiKeyConfig apiKeyConfig;
+
+    public Weather getCurrentWeather() {
+        return currentWeather;
+    }
+
+    public WeatherService(WeatherRepository weatherRepository, LocationService locationService, TypeService typeService, ApiKeyConfig apiKeyConfig) {
+        this.weatherRepository = weatherRepository;
+        this.locationService = locationService;
+        this.typeService = typeService;
+        this.apiKeyConfig = apiKeyConfig;
+    }
 
     private Weather currentWeather;
 
@@ -104,11 +110,15 @@ public class WeatherService {
         LOGGER.info("Reached getLocationObject method");
         Location locationObject;
         if (locationService.firstLocation().isPresent()) {
-            LOGGER.info("Location found, using it");
             locationObject = locationService.firstLocation().get();
+            LOGGER.info("Location found, using it. Location found = {}", locationObject);
         } else {
-            LOGGER.info("No location found, creating a new one");
-            locationObject = locationService.newLocation("Syddansk Universitet", 55.36821, 10.42395);
+            locationObject = locationService.newLocation(
+                    locationService.getStandardLocationName(),
+                    locationService.getStandardLocationLatitude(),
+                    locationService.getStandardLocationLongitude()
+            );
+            LOGGER.info("No location found, creating a new one. Created Location = {}", locationObject);
         }
         return locationObject;
     }
@@ -188,9 +198,11 @@ public class WeatherService {
         try {
             String weatherJson = fetchWeatherJson(locationObject);
             processWeatherJson(weatherJson, locationObject, formattedDate, formattedTime);
-            System.out.println("current weather is = "+currentWeather);
+            LOGGER.info("current weather is = {}", currentWeather);
         } catch (JsonProcessingException e) {
             LOGGER.error("Error processing JSON from external API", e);
+        } catch (Exception e) {
+            LOGGER.error("Error fetching weather from external API for location: {}", locationObject, e);
         }
     }
 

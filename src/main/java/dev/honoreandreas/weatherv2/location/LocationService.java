@@ -1,15 +1,37 @@
 package dev.honoreandreas.weatherv2.location;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class LocationService {
 
     private final LocationRepository locationRepository;
+
+    public LocationService(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
+
+    public String getStandardLocationName() {
+        return standardLocationName;
+    }
+
+    public double getStandardLocationLatitude() {
+        return standardLocationLatitude;
+    }
+
+    public double getStandardLocationLongitude() {
+        return standardLocationLongitude;
+    }
+
+    @Value("${location.name}")
+    private String standardLocationName;
+    @Value("${location.latitude}")
+    private double standardLocationLatitude;
+    @Value("${location.longitude}")
+    private double standardLocationLongitude;
 
     public Optional<Location> locationById(Long id) {
         return locationRepository.findById(id);

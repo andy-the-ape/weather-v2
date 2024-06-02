@@ -1,15 +1,17 @@
 package dev.honoreandreas.weatherv2.weathertype;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class TypeService {
 
     private final TypeRepository typeRepository;
+
+    public TypeService(TypeRepository typeRepository) {
+        this.typeRepository = typeRepository;
+    }
 
     public Optional<Type> typeById(Long id) {
         return typeRepository.findById(id);

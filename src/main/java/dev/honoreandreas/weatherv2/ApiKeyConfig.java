@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApiKeyConfig {
-    @Value("${apiKey}")
+    @Value("${api.key}")
     private String apiKey;
 
     public String getApiKey() {
