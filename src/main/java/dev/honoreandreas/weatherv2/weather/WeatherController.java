@@ -23,12 +23,12 @@ public class WeatherController {
     }
 
     @GetMapping("/history/{date}")
-    public ResponseEntity<Optional<List<Weather>>> getWeatherByDate(@PathVariable String date) {
+    public ResponseEntity<List<Weather>> getWeatherByDate(@PathVariable String date) {
         return new ResponseEntity<>(weatherService.allWeathersOnDate(date), HttpStatus.OK);
     }
 
     @GetMapping("/history/{startDate}/{endDate}")
-    public ResponseEntity<Optional<List<Weather>>> getWeatherRecordsBetweenDates(
+    public ResponseEntity<List<Weather>> getWeatherRecordsBetweenDates(
             @PathVariable String startDate,
             @PathVariable String endDate
     ) {
@@ -36,12 +36,12 @@ public class WeatherController {
     }
 
     @GetMapping("/history/all")
-    public ResponseEntity<Optional<List<Weather>>> getAllWeathers() {
+    public ResponseEntity<List<Weather>> getAllWeathers() {
         return new ResponseEntity<>(weatherService.allWeathers(), HttpStatus.OK);
     }
 
     @GetMapping("/history/48")
-    public ResponseEntity<Optional<List<Weather>>> getLatest48HourlyWeathers() {
+    public ResponseEntity<List<Weather>> getLatest48HourlyWeathers() {
         return new ResponseEntity<>(weatherService.latest48HourlyWeathers(), HttpStatus.OK);
     }
 

@@ -54,49 +54,40 @@ public class WeatherService {
     public Optional<Weather> latestWeather() {
         return weatherRepository.findTopDistinctByOrderByDateDescTimeDesc();
     }
-    public Optional<List<Weather>> allWeathers() {
-        return Optional.of(weatherRepository.findAll());
+    public List<Weather> allWeathers() {
+        return weatherRepository.findAll();
     }
-    public Optional<List<Weather>> allWeathersOnDate(String date) {
-        return weatherRepository.findByDate(date);
+    public List<Weather> allWeathersOnDate(String date) {
+        return weatherRepository.findByDate(date).orElse(Collections.emptyList());
     }
-    public Optional<List<Weather>> allWeathersBetweenDates(String startDate, String endDate) {
+    public List<Weather> allWeathersBetweenDates(String startDate, String endDate) {
         return weatherRepository.findWeatherByDateGreaterThanEqualAndDateLessThanEqual(
                 startDate,
                 endDate,
                 Sort.by(Sort.Direction.ASC, "date","time")
-        );
+        ).orElse(Collections.emptyList());
     }
 
-    public Optional<List<Weather>> latest48HourlyWeathers() {
+    public List<Weather> latest48HourlyWeathers() {
         LocalDate currentDate = LocalDate.now();
-        Optional<List<Weather>> allWeathersTheLast48Hours = allWeathersBetweenDates(
+        List<Weather> allWeathersTheLast48Hours = allWeathersBetweenDates(
                 currentDate.minusDays(2).toString(),
                 currentDate.toString()
         );
+        Map<LocalDateTime, Weather> hourlyWeatherMap = new TreeMap<>(); // TreeMap for automatic sorting
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (Weather weather : allWeathersTheLast48Hours) {
+            LocalDateTime dateTime = LocalDateTime.parse(weather.getDate() + " " + weather.getTime(), formatter);
+            int hour = dateTime.getHour();
+            LocalDateTime mapKey = LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(), hour, 0);
 
-        if (allWeathersTheLast48Hours.isPresent()) {
-            List<Weather> allWeathersUnwrappedList = allWeathersTheLast48Hours.get();
-            Map<LocalDateTime, Weather> hourlyWeatherMap = new TreeMap<>(); // TreeMap for automatic sorting
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            for (Weather weather : allWeathersUnwrappedList) {
-                LocalDateTime dateTime = LocalDateTime.parse(weather.getDate() + " " + weather.getTime(), formatter);
-                int hour = dateTime.getHour();
-                LocalDateTime mapKey = LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(), hour, 0);
-
-                // Check if there's already a Weather object for this hour
-                Weather existingWeather = hourlyWeatherMap.get(mapKey);
-                if (existingWeather == null || existingWeather.getDate().compareTo(weather.getDate()) > 0) {
-                    hourlyWeatherMap.put(mapKey, weather);
-                }
+            // Check if there's already a Weather object for this hour
+            Weather existingWeather = hourlyWeatherMap.get(mapKey);
+            if (existingWeather == null || existingWeather.getDate().compareTo(weather.getDate()) > 0) {
+                hourlyWeatherMap.put(mapKey, weather);
             }
-
-            List<Weather> latest48HourlyWeathersList = new ArrayList<>(hourlyWeatherMap.values());
-            return Optional.of(latest48HourlyWeathersList);
-        } else {
-            return Optional.empty();
         }
+        return new ArrayList<>(hourlyWeatherMap.values());
     }
 
     private String getApiUrl(double latitude, double longitude) {
