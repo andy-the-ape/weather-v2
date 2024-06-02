@@ -69,24 +69,23 @@ public class WeatherService {
     }
 
     public List<Weather> latest48HourlyWeathers() {
-        LocalDate currentDate = LocalDate.now();
         List<Weather> allWeathersTheLast48Hours = allWeathersBetweenDates(
-                currentDate.minusDays(2).toString(),
-                currentDate.toString()
+                LocalDate.now().minusDays(2).toString(),
+                LocalDate.now().toString()
         );
-        Map<LocalDateTime, Weather> hourlyWeatherMap = new TreeMap<>(); // TreeMap for automatic sorting
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        for (Weather weather : allWeathersTheLast48Hours) {
-            LocalDateTime dateTime = LocalDateTime.parse(weather.getDate() + " " + weather.getTime(), formatter);
-            int hour = dateTime.getHour();
-            LocalDateTime mapKey = LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(), hour, 0);
 
-            // Check if there's already a Weather object for this hour
+        Map<LocalDateTime, Weather> hourlyWeatherMap = new TreeMap<>();
+
+        for (Weather weather : allWeathersTheLast48Hours) {
+            LocalDateTime dateTime = LocalDateTime.parse(weather.getDate() + " " + weather.getTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime mapKey = dateTime.withMinute(0).withSecond(0);
+
             Weather existingWeather = hourlyWeatherMap.get(mapKey);
             if (existingWeather == null || existingWeather.getDate().compareTo(weather.getDate()) > 0) {
                 hourlyWeatherMap.put(mapKey, weather);
             }
         }
+
         return new ArrayList<>(hourlyWeatherMap.values());
     }
 
