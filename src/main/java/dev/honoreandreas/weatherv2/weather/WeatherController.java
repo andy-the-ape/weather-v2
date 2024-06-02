@@ -1,4 +1,4 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weather;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

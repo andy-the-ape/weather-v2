@@ -1,5 +1,7 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weather;
 
+import dev.honoreandreas.weatherv2.location.Location;
+import dev.honoreandreas.weatherv2.weathertype.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

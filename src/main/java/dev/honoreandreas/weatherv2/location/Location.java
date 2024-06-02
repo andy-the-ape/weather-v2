@@ -1,6 +1,7 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.honoreandreas.weatherv2.weather.Weather;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

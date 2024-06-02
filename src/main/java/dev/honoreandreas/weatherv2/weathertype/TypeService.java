@@ -1,9 +1,8 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weathertype;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service

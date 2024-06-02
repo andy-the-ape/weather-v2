@@ -1,13 +1,16 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weather;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.honoreandreas.weatherv2.location.Location;
+import dev.honoreandreas.weatherv2.location.LocationService;
+import dev.honoreandreas.weatherv2.weathertype.Type;
+import dev.honoreandreas.weatherv2.weathertype.TypeService;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,7 +44,6 @@ public class WeatherService {
     public Optional<Weather> singleWeatherById(Long id) {
         return weatherRepository.findById(id);
     }
-
     public Optional<Weather> latestWeather() {
         return weatherRepository.findTopDistinctByOrderByDateDescTimeDesc();
     }
@@ -102,8 +104,8 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-    @Scheduled(cron = "0 */5 * * * *")
-//    @Scheduled(fixedDelay = 30000)
+//    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         System.out.println("scheduled method reached");
         /* Get the necessary Location Object (if it exists), otherwise create it. By default,

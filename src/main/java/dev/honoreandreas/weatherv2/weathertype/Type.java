@@ -1,6 +1,7 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weathertype;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.honoreandreas.weatherv2.weather.Weather;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
