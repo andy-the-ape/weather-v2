@@ -3,7 +3,6 @@ package dev.honoreandreas.weatherv2.weather;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.honoreandreas.weatherv2.ApiKeyConfig;
 import dev.honoreandreas.weatherv2.location.Location;
 import dev.honoreandreas.weatherv2.location.LocationService;
 import dev.honoreandreas.weatherv2.weathertype.Type;
@@ -178,8 +177,8 @@ public class WeatherService {
     }
 
     //This method runs every 5 minutes to gather data from the external weather API
-//    @Scheduled(cron = "0 */5 * * * *")
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 */5 * * * *")
+//    @Scheduled(fixedDelay = 30000)
     public void fetchWeatherFromExternalApi() {
         LOGGER.info("scheduled method reached");
         Location locationObject = getLocationObject();

@@ -1,4 +1,4 @@
-package dev.honoreandreas.weatherv2;
+package dev.honoreandreas.weatherv2.weather;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

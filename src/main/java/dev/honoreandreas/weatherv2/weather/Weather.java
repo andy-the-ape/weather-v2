@@ -22,14 +22,13 @@ public class Weather {
     private String time;
     private double temperature;
     private int humidity;
+    private String description;
 
     @Column(name = "wind_speed")
     private double windSpeed;
 
     @Column(name = "wind_direction")
     private int windDirection;
-
-    private String description;
 
     public Weather(Builder builder) {
         this.location = builder.location;
