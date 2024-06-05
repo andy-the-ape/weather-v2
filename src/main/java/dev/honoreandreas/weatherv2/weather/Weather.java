@@ -42,7 +42,8 @@ public class Weather {
         this.description = builder.description;
     }
 
-    public Weather() {
+    //Default constructor for JPA
+    protected Weather() {
 
     }
 

@@ -30,7 +30,8 @@ public class Type {
         this.iconCode = iconCode;
     }
 
-    public Type() {
+    //Default constructor for JPA
+    protected Type() {
 
     }
 

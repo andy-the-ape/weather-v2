@@ -20,13 +20,23 @@ public class Location {
     private double latitude;
     private double longitude;
 
-    public Location(String name, double latitude, double longitude) {
+    private static Location instance;
+
+    private Location(String name, double latitude, double longitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Location() {
+    public static Location getInstance(String name, double latitude, double longitude) {
+        if (instance == null) {
+            instance = new Location(name, latitude, longitude);
+        }
+        return instance;
+    }
+
+    //Default constructor for JPA
+    protected Location() {
 
     }
 

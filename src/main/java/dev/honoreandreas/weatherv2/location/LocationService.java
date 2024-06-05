@@ -43,7 +43,7 @@ public class LocationService {
 
     @Transactional
     public Location newLocation(String name, double latitude, double longitude) {
-        Location locationObject = new Location(name, latitude, longitude);
+        Location locationObject = Location.getInstance(name, latitude, longitude);
         return locationRepository.save(locationObject);
     }
 }
