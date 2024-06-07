@@ -17,7 +17,7 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Optional<Weather>> getLatestWeather() {
         return new ResponseEntity<>(weatherService.latestWeather(), HttpStatus.OK);
     }
