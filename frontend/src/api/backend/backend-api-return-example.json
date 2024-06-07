@@ -1,0 +1,22 @@
+{
+    "id": 8,
+    "location": {
+        "id": 1,
+        "name": "Odense",
+        "latitude": 55.39594,
+        "longitude": 10.38831
+    },
+    "type": {
+        "id": 1,
+        "name": "Clear",
+        "apiId": 800,
+        "iconCode": "01d"
+    },
+    "date": "2024-03-09",
+    "time": "16:54:23",
+    "temperature": 5.46,
+    "humidity": 77,
+    "windSpeed": 8.55,
+    "windDirection": 99,
+    "description": "klar himmel"
+}

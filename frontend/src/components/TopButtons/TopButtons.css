@@ -1,0 +1,38 @@
+.topbuttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link {
+  text-decoration: inherit;
+}
+
+.topbuttons button {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  margin: 1rem 1rem 1rem 0rem;
+  padding: 0.7rem 1.8rem 0.7rem 1.2rem;
+  border-radius: 12px;
+  border-style: hidden;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.buttonIcon {
+  bottom: -30%;
+  margin-right: 0.5rem;
+}
+
+.topbuttons button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  scale: 1.1;
+  transition: ease-out 0.1s;
+}
+
+.topbuttons button:active {
+  background-color: rgba(255, 255, 255, 0.7);
+}
